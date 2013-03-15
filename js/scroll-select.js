@@ -24,6 +24,7 @@
         popup.setAttribute('style', 'position:absolute;background:yellow;left:' + left + 'px;top:' + top + 'px;width:' + popUpConfig.width + 'px;');
         ta.style.outline = 'yellow solid 1px';
         popup.setAttribute('class', popupClass);
+        popup.dataset.content = ta.textContent;
         document.body.appendChild(popup);
         e.stopPropagation();
     }
@@ -38,7 +39,17 @@
     function mousewheelHandler(e) {
         var wheel = (e.wheelDelta) ? e.wheelDelta / 120 : -(e.detail || 0) / 3;
         //up 1: down -1
-        log(wheel);
+        var popUp = getPopUp();
+        var textContent = popUp.dataset.content || '';
+        var length = textContent.length + wheel;
+        if (length > popUp.textContent.length) length = 0;
+        if (length < 0) length = popUp.textContent.length;
+
+        popUp.dataset.content = popUp.textContent.slice(0, length);
+        var reg = new RegExp('^(' + popUp.dataset.content + ')');
+        popUp.innerHTML = popUp.textContent.replace(reg, '<span style="color: yellow; font-weight: bold;background: gray">$1</span>');
+        log(popUp.dataset.content);
+        log(popUp.innerHTML);
     }
 
     function mousemoveHandler(e) {
@@ -54,6 +65,14 @@
         }
         popup.style.left = left + 'px';
         popup.style.top = top + 'px';
+        e.stopPropagation();
+    }
+
+    function clickHandler(e) {
+        var popUp = getPopUp();
+        var content = popUp.dataset.content;
+        mouseoutHandler(e);
+        window.open('http://www.google.com.hk/search?q=' + content);
         e.stopPropagation();
     }
 
@@ -88,6 +107,7 @@
                 doms[i][(removeHandler ? 'remove' : 'add') + 'EventListener']('mouseout', mouseoutHandler);
                 doms[i][(removeHandler ? 'remove' : 'add') + 'EventListener']('mousemove', mousemoveHandler);
                 doms[i][(removeHandler ? 'remove' : 'add') + 'EventListener']('mousewheel', mousewheelHandler);
+                doms[i][(removeHandler ? 'remove' : 'add') + 'EventListener']('click', clickHandler);
             }
         })();
     };
