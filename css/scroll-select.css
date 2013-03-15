@@ -1,0 +1,4 @@
+.scroll-select-popUp { position: absolute; background: yellow; }
+.scroll-select-popUp .selected-content { color: yellow; font-weight: bold; background: gray; }
+
+.scroll-select-activate { outline: yellow solid 1px; }

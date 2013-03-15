@@ -17,13 +17,12 @@
     function mouseoverHandler(e) {
         var ta = e.target;
         log(ta.textContent);
-        var top = e.clientY + cursorOffset.y;
-        var left = e.clientX + cursorOffset.x;
         var popup = document.createElement('div');
         popup.innerHTML = ta.textContent;
-        popup.setAttribute('style', 'position:absolute;background:yellow;left:' + left + 'px;top:' + top + 'px;width:' + popUpConfig.width + 'px;');
-        ta.style.outline = 'yellow solid 1px';
-        popup.setAttribute('class', popupClass);
+        ta.classList.add('scroll-select-activate');
+        popup.classList.add(popupClass);
+        popup.classList.add("scroll-select-popUp");
+        popup.style.width = popUpConfig.width + 'px';
         popup.dataset.content = ta.textContent;
         document.body.appendChild(popup);
         e.stopPropagation();
@@ -31,8 +30,10 @@
 
     function mouseoutHandler(e) {
         var ta = e.target;
-        ta.style.outline = 'none';
-        document.body.removeChild(getPopUp());
+        ta.classList.remove('scroll-select-activate');
+        var popup = getPopUp();
+        if (!popup) return;
+        document.body.removeChild(popup);
         e.stopPropagation();
     }
 
@@ -47,7 +48,7 @@
 
         popUp.dataset.content = popUp.textContent.slice(0, length);
         var reg = new RegExp('^(' + popUp.dataset.content + ')');
-        popUp.innerHTML = popUp.textContent.replace(reg, '<span style="color: yellow; font-weight: bold;background: gray">$1</span>');
+        popUp.innerHTML = popUp.textContent.replace(reg, '<span class="selected-content">$1</span>');
         log(popUp.dataset.content);
         log(popUp.innerHTML);
     }
