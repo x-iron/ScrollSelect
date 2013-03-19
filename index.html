@@ -12,6 +12,20 @@
 <div class="c1">343</div>
 <div id="d1" style="background: none;">555<span>222</span>ddd</div>
 <script>
+    ScrollSelect.config(
+        {
+            callback:function(val) {
+                alert(val);
+            },
+            popUpConfig: {
+                width: 200
+            },
+            cursorOffset:{
+                x:8,
+                y:18
+            }
+        }
+    );
     ScrollSelect(['#d1']);
     //    ScrollSelect(['.c1','#d1',document],true);
 </script>
